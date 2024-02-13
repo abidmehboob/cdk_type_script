@@ -19,7 +19,7 @@ export class ApiGatewayStack extends cdk.Stack {
     super(scope, id, props);
 
     // Define IAM role for API Gateway
-    const apiGatewayRole = new iam.Role(this, "ApiGatewayRole", {
+    const apiGatewayRole = new iam.Role(this, "AWSServiceRoleForAPIGateway", {
       assumedBy: new iam.ServicePrincipal("apigateway.amazonaws.com"),
     });
 
@@ -36,8 +36,7 @@ export class ApiGatewayStack extends cdk.Stack {
       description: "API for the HelloWorld Lambda",
       deployOptions: {
         stageName: "prod",
-        metricsEnabled: true,
-        loggingLevel: apigateway.MethodLoggingLevel.INFO,
+        metricsEnabled: false,
       },
       endpointTypes: [apigateway.EndpointType.PRIVATE],
       // Attach the IAM role to the API Gateway

@@ -10,6 +10,7 @@ export class CloudFrontStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
+    
     // Create an S3 bucket for the website content
     const websiteBucket = new s3.Bucket(this, "WebsiteBucket", {
       blockPublicAccess: new s3.BlockPublicAccess({
@@ -20,13 +21,13 @@ export class CloudFrontStack extends cdk.Stack {
       }),
     });
 
-    websiteBucket.addToResourcePolicy(
-      new iam.PolicyStatement({
-        actions: ["s3:GetObject"],
-        resources: [websiteBucket.arnForObjects("*")],
-        principals: [new iam.ServicePrincipal("cloudfront.amazonaws.com")],
-      })
-    );
+    // websiteBucket.addToResourcePolicy(
+    //   new iam.PolicyStatement({
+    //     actions: ["s3:GetObject"],
+    //     resources: [websiteBucket.arnForObjects("*")],
+    //     principals: [new iam.ServicePrincipal("cloudfront.amazonaws.com")],
+    //   })
+    // );
 
     // Create a CloudFront distribution that uses the S3 bucket as its origin
     const cloudfrontDistribution = new cloudfront.Distribution(
@@ -37,6 +38,15 @@ export class CloudFrontStack extends cdk.Stack {
           origin: new origins.S3Origin(websiteBucket),
         },
       }
+    );
+
+     // Add a bucket policy to allow CloudFront to access objects in the S3 bucket
+     websiteBucket.addToResourcePolicy(
+      new iam.PolicyStatement({
+        actions: ["s3:GetObject"],
+        resources: [websiteBucket.arnForObjects("*")],
+        principals: [new iam.ServicePrincipal("cloudfront.amazonaws.com")],
+      })
     );
   }
 }
