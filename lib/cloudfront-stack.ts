@@ -13,6 +13,7 @@ export class CloudFrontStack extends cdk.Stack {
     
     // Create an S3 bucket for the website content
     const websiteBucket = new s3.Bucket(this, "WebsiteBucket", {
+      enforceSSL: true,
       blockPublicAccess: new s3.BlockPublicAccess({
         blockPublicAcls: true,
         blockPublicPolicy: true,
@@ -20,14 +21,6 @@ export class CloudFrontStack extends cdk.Stack {
         restrictPublicBuckets: true,
       }),
     });
-
-    // websiteBucket.addToResourcePolicy(
-    //   new iam.PolicyStatement({
-    //     actions: ["s3:GetObject"],
-    //     resources: [websiteBucket.arnForObjects("*")],
-    //     principals: [new iam.ServicePrincipal("cloudfront.amazonaws.com")],
-    //   })
-    // );
 
     // Create a CloudFront distribution that uses the S3 bucket as its origin
     const cloudfrontDistribution = new cloudfront.Distribution(

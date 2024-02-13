@@ -1,5 +1,5 @@
 {
-  "app": "npx ts-node --prefer-ts-exts bin/cdk_task.ts",
+  "app": "npx ts-node --prefer-ts-exts dist/lib/bin/cdk_task.js",
   "watch": {
     "include": [
       "**"
