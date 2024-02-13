@@ -37,6 +37,7 @@ export class ApiGatewayStack extends cdk.Stack {
       deployOptions: {
         stageName: "prod",
         metricsEnabled: false,
+        //  loggingLevel: apigateway.MethodLoggingLevel.INFO,
       },
       endpointTypes: [apigateway.EndpointType.PRIVATE],
       // Attach the IAM role to the API Gateway

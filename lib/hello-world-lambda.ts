@@ -19,7 +19,7 @@ export class HelloWorldLambdaStack extends cdk.Stack {
     });
     this.lambdaFunction = new lambda.Function(this, "HelloWorldFunction", {
       // Assign the lambda function to the property
-      runtime: lambda.Runtime.NODEJS_14_X,
+      runtime: lambda.Runtime.NODEJS_18_X,
       handler: "index.handler",
       code: lambda.Code.fromAsset("lambda"),
       role: lambdaRole, // Assign the IAM role to the Lambda function
