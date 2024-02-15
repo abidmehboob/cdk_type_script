@@ -6,6 +6,8 @@ import {
   aws_iam as iam,
   aws_lambda as lambda,
   aws_apigateway as apigateway,
+  aws_logs as logs,
+  aws_kms as kms,
 } from "aws-cdk-lib";
 
 export class ApiGatewayStack extends cdk.Stack {
@@ -70,5 +72,19 @@ export class ApiGatewayStack extends cdk.Stack {
 
     // Allow API Gateway to access S3 bucket
     this.bucket.grantReadWrite(apiGatewayRole);
+
+    // Create a KMS key for encryption
+    const kmsKey = new kms.Key(this, "ApiGatewayLogKey", {
+      enableKeyRotation: true,
+    });
+
+    // Create CloudWatch log group with retention policy and encryption
+    const logGroup = new logs.LogGroup(this, "ApiGatewayLogGroup", {
+      retention: logs.RetentionDays.ONE_WEEK, // Set retention policy to one week
+      encryptionKey: kmsKey, // Encrypt logs using KMS
+    });
+
+    // Grant permissions for API Gateway to write logs to the log group
+    logGroup.grantWrite(apiGatewayRole);
   }
 }
